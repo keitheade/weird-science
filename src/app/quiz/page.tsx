@@ -88,11 +88,11 @@ function QuizContent() {
   const loadQuestions = useCallback(
     async (topicId: string) => {
       const res = await fetch(`/api/topics/${topicId}`);
-      const data = await res.json();
+      const data = (await res.json()) as { questions: Question[] };
       // Shuffle, then trim to the chosen quiz length (e.g. 5 for a refresher,
       // 50 for a full exam). If a topic has fewer questions than requested,
       // slice simply returns all of them.
-      setQuestions(shuffle(data.questions).slice(0, quizLength));
+      setQuestions(shuffle(data.questions ?? []).slice(0, quizLength));
       setCurrentIndex(0);
       setScore({ correct: 0, total: 0 });
       setShowResult(false);
