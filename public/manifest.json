@@ -1,0 +1,10 @@
+{
+  "name": "Weird Science",
+  "short_name": "WeirdScience",
+  "description": "VCE Science & Maths tutor — Pathway to Surgery",
+  "start_url": "/profiles",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#312e81",
+  "icons": []
+}

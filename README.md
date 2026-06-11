@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Weird Science — Pathway to Surgery
 
-## Getting Started
+A self-hosted VCE Science & Maths tutor web app for aspiring surgeons. Covers **Chemistry**, **Physics**, **Biology**, and **Mathematical Methods** from Year 9/10 through VCE Units 1–4, aligned to the Victorian (Australian) curriculum.
 
-First, run the development server:
+## Features
+
+- **Learn** — Curated lessons with surgeon-relevance callouts
+- **Quiz** — MCQ, numeric, multi-select, drag-label, equation balance & interactive questions
+- **Interactive Labs** — Atom builder, periodic table, physics sims, biology diagrams, function grapher
+- **AI Tutor** — Optional Gemini or local LM Studio (OpenAI-compatible API)
+- **Gamification** — XP, levels, streaks, badges, pathway map
+- **Progress** — Dashboard with mastery radar, strengths & improvement areas
+- **Multi-profile** — PIN-protected kid profiles
+- **Responsive** — Works on phones and laptops
+
+## Local Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Set up database and seed content
+npm run db:setup
+
+# Start dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## AI Tutor Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Go to **Settings** in the app
+2. Choose **Google Gemini** or **LM Studio (Local)**
+3. Enter your API key and enable the tutor
 
-## Learn More
+**Gemini:** Get a key from [Google AI Studio](https://aistudio.google.com/apikey). Use the default OpenAI-compatible endpoint.
 
-To learn more about Next.js, take a look at the following resources:
+**LM Studio:** Start the local server (default `http://localhost:1234/v1/`). API key can be any value.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy to Synology NAS
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Option A: Docker Compose (recommended)
 
-## Deploy on Vercel
+1. Copy this project to your Synology (e.g. `/docker/weird-science/`)
+2. Open **Container Manager** → **Project** → **Create**
+3. Point to the `docker-compose.yml` file
+4. Build and start
+5. Access at `http://<nas-ip>:3000`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Data persists in the `./data` folder (SQLite database).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Option B: Manual Docker build
+
+```bash
+docker build -t weird-science .
+docker run -d \
+  -p 3000:3000 \
+  -v ./data:/app/data \
+  --name weird-science \
+  weird-science
+```
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `DATABASE_URL` | `file:./data/weird-science.db` | SQLite database path |
+| `AI_ENABLED` | `false` | Enable AI tutor |
+| `AI_PROVIDER` | `gemini` | Provider preset name |
+| `AI_BASE_URL` | Gemini OpenAI endpoint | API base URL |
+| `AI_API_KEY` | — | API key |
+| `AI_MODEL` | `gemini-2.0-flash` | Model name |
+
+## Tech Stack
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS + custom UI components
+- Prisma + SQLite
+- Framer Motion + Canvas/SVG interactives
+- Recharts for analytics
+- OpenAI-compatible client for AI
+
+## Curriculum
+
+Content follows VCAA study designs and Victorian Curriculum F–10 science, structured as:
+
+- **Year 9/10** foundation topics
+- **VCE Units 1–4** per subject
+- Surgeon-relevance notes throughout
+
+Subjects: Chemistry, Physics, Biology, Mathematical Methods.
